@@ -1,50 +1,28 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import { WalletConnect } from '@/components/wallet-connect'
+import { ProfileApp } from '@/components/profile-app'
 
-function App() {
-  const account = useAccount()
-  const { connectors, connect, status, error } = useConnect()
-  const { disconnect } = useDisconnect()
-
+export default function Home() {
   return (
-    <>
-      <div>
-        <h2>Account</h2>
-        <div className='prose flex flex-col text-red-500'>{'test'}</div>
-
-        <div>
-          status: {account.status}
-          <br />
-          addresses: {JSON.stringify(account.addresses)}
-          <br />
-          chainId: {account.chainId}
+    <main className='container mx-auto px-4 py-8'>
+      <div className='flex min-h-[80vh] flex-col items-center justify-center gap-8'>
+        <div className='mb-8 text-center'>
+          <h1 className='text-4xl font-bold tracking-tight'>SIWE Demo App</h1>
+          <p className='text-muted-foreground mt-2 text-lg'>
+            Sign-In with Ethereum demonstration with profile management
+          </p>
         </div>
 
-        {account.status === 'connected' && (
-          <Button type='button' onClick={() => disconnect()}>
-            Disconnect
-          </Button>
-        )}
+        <div className='grid w-full max-w-4xl gap-8 md:grid-cols-2'>
+          <div>
+            <WalletConnect />
+          </div>
+          <div>
+            <ProfileApp />
+          </div>
+        </div>
       </div>
-
-      <div>
-        <h2>Connect</h2>
-        {connectors.map(connector => (
-          <Button
-            key={connector.uid}
-            onClick={() => connect({ connector })}
-            type='button'
-          >
-            {connector.name}
-          </Button>
-        ))}
-        <div>{status}</div>
-        <div>{error?.message}</div>
-      </div>
-    </>
+    </main>
   )
 }
-
-export default App
