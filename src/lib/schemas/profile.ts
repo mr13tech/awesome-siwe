@@ -3,13 +3,13 @@ import * as z from 'zod'
 // Base schema for social media
 const socialMediaSchema = z.object({
   platform: z.enum(['twitter', 'github']),
-  username: z.string().min(1, 'Username is required'),
+  username: z.string().optional().default(''),
 })
 
 // Main profile schema
 export const profileSchema = z.object({
-  name: z.string().min(1, 'Name is required').max(100),
-  ensName: z.string().min(1, 'ENS name is required'),
+  name: z.string().max(100).optional().default(''),
+  ensName: z.string().optional().default(''),
   avatar: z.string().url('Invalid URL format').optional().or(z.literal('')),
   header: z.string().url('Invalid URL format').optional().or(z.literal('')),
   description: z
@@ -19,7 +19,10 @@ export const profileSchema = z.object({
   location: z.string().max(100).optional(),
   email: z.string().email('Invalid email format').optional().or(z.literal('')),
   url: z.string().url('Invalid URL format').optional().or(z.literal('')),
-  socialmedia: z.array(socialMediaSchema).default([]),
+  socialmedia: z.array(socialMediaSchema).default([
+    { platform: 'twitter', username: '' },
+    { platform: 'github', username: '' },
+  ]),
 })
 
 export type ProfileFormData = z.infer<typeof profileSchema>

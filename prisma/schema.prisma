@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  // No engine setting for use with Accelerate
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Profile model based on the ProfileFormData schema
+model Profile {
+  address     String   @id // Ethereum wallet address as primary key
+  name        String?
+  ensName     String?
+  avatar      String?
+  header      String?
+  description String?  @db.Text
+  location    String?
+  email       String?
+  url         String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Social media accounts as JSON
+  socialmedia Json?
+}

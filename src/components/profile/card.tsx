@@ -10,9 +10,10 @@ import { toast } from 'sonner'
 
 interface EditToggleProps {
   initialData: ProfileFormData
+  onSaveProfile?: (data: ProfileFormData) => Promise<void>
 }
 
-export function ProfileCard({ initialData }: EditToggleProps) {
+export function ProfileCard({ initialData, onSaveProfile }: EditToggleProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [data, setData] = useState<ProfileFormData>(initialData)
   const [isLoading, setIsLoading] = useState(false)
@@ -24,8 +25,13 @@ export function ProfileCard({ initialData }: EditToggleProps) {
   const handleSave = async (formData: ProfileFormData) => {
     setIsLoading(true)
     try {
-      // Here you would typically save the data to backend/API
-      console.log('Saving profile data:', formData)
+      if (onSaveProfile) {
+        // Use the provided save function
+        await onSaveProfile(formData)
+      } else {
+        // Fallback to console log if no save function provided
+        console.log('Saving profile data:', formData)
+      }
 
       // Update the state with the new data
       setData(formData)
@@ -33,10 +39,13 @@ export function ProfileCard({ initialData }: EditToggleProps) {
       // Exit edit mode
       setIsEditing(false)
 
-      // Show success message
-      toast.success('Profile updated', {
-        description: 'Your profile information has been updated successfully.',
-      })
+      // Show success message if no external save function provided
+      if (!onSaveProfile) {
+        toast.success('Profile updated', {
+          description:
+            'Your profile information has been updated successfully.',
+        })
+      }
     } catch (error) {
       console.error('Error saving profile data:', error)
       toast.error('Error', {
