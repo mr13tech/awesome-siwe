@@ -1,63 +1,121 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { useAccount } from 'wagmi'
-import { Profile } from '@/components/profile/profile'
+import { useSession } from 'next-auth/react'
+import { ProtectedRoute } from '@/components/protected-route'
+import { truncateAddress } from '@/lib/siwe'
+import { Shield } from 'lucide-react'
+import { SessionDetails } from '@/components/session-details'
 
 export default function ProfilePage() {
-  const router = useRouter()
-  const { status } = useAccount()
+  const { data: session } = useSession()
 
-  // Redirect to home if not connected
-  useEffect(() => {
-    if (status === 'disconnected') {
-      router.push('/')
+  // Format the timestamp from the session
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return 'Unknown'
+    try {
+      return new Date(dateString).toLocaleString()
+    } catch (e) {
+      return 'Invalid date'
     }
-  }, [status, router])
-
-  // Show loading state while checking connection
-  if (status === 'reconnecting' || status === 'connecting') {
-    return (
-      <div className='container mx-auto flex min-h-[80vh] items-center justify-center px-4 py-16'>
-        <div className='text-center'>
-          <div className='inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]' />
-          <p className='text-muted-foreground mt-4'>
-            Verifying wallet connection...
-          </p>
-        </div>
-      </div>
-    )
-  }
-
-  // If disconnected and not yet redirected, show access denied
-  if (status === 'disconnected') {
-    return (
-      <div className='container mx-auto flex min-h-[80vh] items-center justify-center px-4 py-16'>
-        <div className='text-center'>
-          <h1 className='mb-2 text-2xl font-bold'>Access Denied</h1>
-          <p className='text-muted-foreground'>
-            Please connect your wallet to view your profile.
-          </p>
-        </div>
-      </div>
-    )
   }
 
   return (
-    <main className='container mx-auto px-4 py-8'>
-      <div className='flex min-h-[80vh] flex-col items-center justify-center'>
-        <div className='mb-8 text-center'>
-          <h1 className='text-3xl font-bold tracking-tight'>Your Profile</h1>
-          <p className='text-muted-foreground mt-2'>
-            Manage your personal information
-          </p>
-        </div>
+    <ProtectedRoute>
+      <div className='container mx-auto max-w-4xl py-8'>
+        <h1 className='mb-8 text-3xl font-bold'>Your Profile</h1>
 
-        <div className='w-full max-w-2xl'>
-          <Profile />
+        <div className='rounded-lg bg-white p-6 shadow dark:bg-gray-800'>
+          <div className='mb-6'>
+            <h2 className='mb-2 text-xl font-semibold'>Account Information</h2>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+              <div>
+                <p className='text-sm text-gray-500 dark:text-gray-400'>
+                  Connected Wallet
+                </p>
+                <p className='font-medium'>
+                  {session?.address
+                    ? truncateAddress(session.address)
+                    : 'Not connected'}
+                </p>
+                <p className='mt-1 text-xs break-all text-gray-500'>
+                  {session?.address}
+                </p>
+              </div>
+              <div>
+                <p className='text-sm text-gray-500 dark:text-gray-400'>
+                  Blockchain
+                </p>
+                <p className='font-medium'>
+                  {session?.chainId
+                    ? `Chain ID: ${session.chainId}`
+                    : 'Unknown chain'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className='mb-6'>
+            <h2 className='mb-4 text-xl font-semibold'>Security Information</h2>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+              <div>
+                <p className='text-sm text-gray-500 dark:text-gray-400'>
+                  Authentication Type
+                </p>
+                <p className='font-medium'>Sign-In with Ethereum (SIWE)</p>
+              </div>
+              <div>
+                <p className='text-sm text-gray-500 dark:text-gray-400'>
+                  Last Signed In
+                </p>
+                <p className='font-medium'>{formatDate(session?.signedAt)}</p>
+              </div>
+              {session?.expirationTime && (
+                <div>
+                  <p className='text-sm text-gray-500 dark:text-gray-400'>
+                    Message Expiration
+                  </p>
+                  <p className='font-medium'>
+                    {formatDate(session.expirationTime)}
+                  </p>
+                </div>
+              )}
+              <div>
+                <p className='text-sm text-gray-500 dark:text-gray-400'>
+                  Session Type
+                </p>
+                <p className='font-medium'>JWT with 30-day expiration</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h2 className='mb-4 flex items-center text-xl font-semibold'>
+              <Shield className='mr-2 h-5 w-5 text-green-500' />
+              About Sign-In with Ethereum
+            </h2>
+            <div className='space-y-2 text-sm text-gray-600 dark:text-gray-300'>
+              <p>
+                Sign-In with Ethereum (SIWE) is a secure authentication method
+                that uses your wallet to prove your identity without sharing a
+                password.
+              </p>
+              <p>
+                When you sign a SIWE message, you're proving ownership of your
+                Ethereum address without revealing any sensitive information.
+              </p>
+              <p>Benefits of SIWE:</p>
+              <ul className='list-disc space-y-1 pl-5'>
+                <li>No password to remember or risk getting stolen</li>
+                <li>Your private keys never leave your wallet</li>
+                <li>Full control over your digital identity</li>
+                <li>Seamless authentication across web3 applications</li>
+              </ul>
+            </div>
+          </div>
+
+          <SessionDetails />
         </div>
       </div>
-    </main>
+    </ProtectedRoute>
   )
 }
