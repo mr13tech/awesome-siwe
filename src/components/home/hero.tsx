@@ -1,12 +1,15 @@
 import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { useSIWE } from '@/hooks/useSIWE'
+import { Web3Button } from '@/components/web3-button'
+import { useAccount } from 'wagmi'
 
-interface HomeHeroProps {
-  isConnected: boolean
-}
+export function HomeHero() {
+  const { isAuthenticated, signIn } = useSIWE()
+  const { status } = useAccount()
+  const isConnected = status === 'connected'
 
-export function HomeHero({ isConnected }: HomeHeroProps) {
   return (
     <div className='flex max-w-3xl flex-col items-center gap-8 text-center'>
       <div className='space-y-4'>
@@ -20,27 +23,8 @@ export function HomeHero({ isConnected }: HomeHeroProps) {
         </p>
       </div>
 
-      <div className='grid w-full max-w-md gap-6'>
-        {isConnected ? (
-          <Button
-            asChild
-            size='lg'
-            className='group relative overflow-hidden transition-all duration-300 hover:pr-12'
-          >
-            <Link
-              href='/profile'
-              className='flex items-center justify-center gap-2'
-            >
-              View Your Profile
-              <ArrowRight className='absolute right-4 h-5 w-5 translate-x-3 transform opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100' />
-            </Link>
-          </Button>
-        ) : (
-          <p className='text-muted-foreground text-sm sm:text-base'>
-            Connect your wallet using the button in the top right corner to
-            access your profile.
-          </p>
-        )}
+      <div className='item-center flex w-full max-w-md justify-center rounded border p-4 shadow'>
+        <Web3Button />
       </div>
     </div>
   )

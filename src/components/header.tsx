@@ -12,52 +12,29 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
-import { useAccount } from 'wagmi'
 import { useState } from 'react'
-import { Menu, Home, User, BookOpen } from 'lucide-react'
+import { Menu, Home, BookOpen } from 'lucide-react'
 import { Button } from './ui/button'
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet'
+import { useSIWE } from '@/hooks/useSIWE'
 
 export function Header() {
   const pathname = usePathname()
-  const { status } = useAccount()
   const [isOpen, setIsOpen] = useState(false)
+  const { isAuthenticated } = useSIWE()
 
   return (
     <header className='bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur'>
       <div className='container flex h-16 items-center justify-between'>
-        <div className='flex items-center gap-6'>
+        <div className='flex items-center gap-6 p-4'>
           <Link href='/' className='flex items-center space-x-2'>
             <span className='from-primary bg-gradient-to-r to-blue-600 bg-clip-text text-xl font-bold text-transparent'>
-              SIWE Demo
+              awesome SIWE
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
           <NavigationMenu className='hidden md:flex'>
             <NavigationMenuList>
-              <NavigationMenuItem>
-                <Link href='/' legacyBehavior passHref>
-                  <NavigationMenuLink
-                    className={navigationMenuTriggerStyle()}
-                    active={pathname === '/'}
-                  >
-                    Home
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-              {status === 'connected' && (
-                <NavigationMenuItem>
-                  <Link href='/profile' legacyBehavior passHref>
-                    <NavigationMenuLink
-                      className={navigationMenuTriggerStyle()}
-                      active={pathname === '/profile'}
-                    >
-                      Profile
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-              )}
               <NavigationMenuItem>
                 <NavigationMenuTrigger>Resources</NavigationMenuTrigger>
                 <NavigationMenuContent>
@@ -142,24 +119,6 @@ export function Header() {
                     </span>
                   </Link>
                   <nav className='flex flex-col gap-4'>
-                    <Link
-                      href='/'
-                      className={`flex items-center gap-2 text-sm ${pathname === '/' ? 'text-primary font-medium' : 'text-muted-foreground'}`}
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <Home className='h-4 w-4' />
-                      Home
-                    </Link>
-                    {status === 'connected' && (
-                      <Link
-                        href='/profile'
-                        className={`flex items-center gap-2 text-sm ${pathname === '/profile' ? 'text-primary font-medium' : 'text-muted-foreground'}`}
-                        onClick={() => setIsOpen(false)}
-                      >
-                        <User className='h-4 w-4' />
-                        Profile
-                      </Link>
-                    )}
                     <div className='text-sm font-medium'>Resources</div>
                     <div className='ml-4 flex flex-col gap-3'>
                       <a

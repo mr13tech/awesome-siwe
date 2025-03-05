@@ -20,7 +20,7 @@ export default function Home() {
           </p>
         </div>
 
-        <HomeHero isConnected={isConnected} />
+        <HomeHero />
 
         {!isConnected && (
           <div className='w-full space-y-6'>
