@@ -5,7 +5,7 @@ import { Inter } from 'next/font/google'
 import { cookieToInitialState } from 'wagmi'
 import { getConfig } from '@/config/wagmi'
 import { Providers } from '@/app/providers'
-import { SiteHeader } from '@/components/site-header'
+import { Header } from '@/components/header'
 import React from 'react'
 import { headers } from 'next/headers'
 
@@ -31,7 +31,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers initialState={initialState}>
           <div className='relative flex min-h-screen flex-col'>
-            <SiteHeader />
+            <Header />
             <div className='flex-1'>{children}</div>
           </div>
         </Providers>
