@@ -6,10 +6,11 @@ import React from 'react'
 import { useSIWE } from '@/hooks/useSIWE'
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, isLoading, fetchSession } = useSIWE()
+  const { isAuthenticated, isLoading, fetchSession, session } = useSIWE()
   const [isChecking, setIsChecking] = useState(true)
   const router = useRouter()
 
+  // Initial auth check
   useEffect(() => {
     const checkAuth = async () => {
       await fetchSession()
@@ -19,15 +20,20 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     checkAuth()
   }, [fetchSession])
 
+  // Handle authentication state changes
   useEffect(() => {
-    if (isChecking || isLoading) return
+    // If still loading initial data, don't do anything yet
+    if (isChecking) return
 
+    // If not authenticated (including after signOut sets session to null), redirect to home
     if (!isAuthenticated) {
-      router.push('/')
+      console.log('Not authenticated, redirecting to home page')
+      router.replace('/')
     }
-  }, [isAuthenticated, isLoading, isChecking, router])
+  }, [isAuthenticated, isChecking, router, session])
 
-  if (isLoading || isChecking) {
+  // Show loading UI when checking authentication
+  if (isChecking || isLoading) {
     return (
       <div className='flex min-h-[50vh] items-center justify-center'>
         <div className='flex flex-col items-center gap-2'>
@@ -57,6 +63,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     )
   }
 
+  // Don't render children if not authenticated
   if (!isAuthenticated) {
     return null
   }
