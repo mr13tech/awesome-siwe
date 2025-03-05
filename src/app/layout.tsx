@@ -2,30 +2,39 @@ import './globals.css'
 
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { headers } from 'next/headers'
-import { type ReactNode } from 'react'
 import { cookieToInitialState } from 'wagmi'
-
 import { getConfig } from '@/config/wagmi'
 import { Providers } from '@/app/providers'
+import { SiteHeader } from '@/components/site-header'
+import React from 'react'
+import { headers } from 'next/headers'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Awesome SIWE',
-  description:
-    'Curated list of SIWE resources and web app example with nextjs and wagmi',
+  title: 'SIWE Demo App',
+  description: 'Sign-In with Ethereum demonstration with profile management',
 }
 
-export default function RootLayout(props: { children: ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const initialState = cookieToInitialState(
     getConfig(),
     headers().get('cookie'),
   )
+
   return (
     <html lang='en'>
       <body className={inter.className}>
-        <Providers initialState={initialState}>{props.children}</Providers>
+        <Providers initialState={initialState}>
+          <div className='relative flex min-h-screen flex-col'>
+            <SiteHeader />
+            <div className='flex-1'>{children}</div>
+          </div>
+        </Providers>
       </body>
     </html>
   )
