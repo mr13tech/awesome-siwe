@@ -4,11 +4,12 @@ import { ProtectedRoute } from '@/components/protected-route'
 import { formatAddress, formatDate } from '@/lib/auth'
 import { Shield } from 'lucide-react'
 import { SessionDetails } from '@/components/session-details'
+import { ProfileCard } from '@/components/profile/card'
 import { useSIWE } from '@/hooks/useSIWE'
 import { useEffect, useState } from 'react'
 
 export default function ProfilePage() {
-  const { session, isAuthenticated, isLoading, fetchSession } = useSIWE()
+  const { session, isLoading, fetchSession } = useSIWE()
   const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
@@ -54,7 +55,33 @@ export default function ProfilePage() {
         ) : (
           session && (
             <div className='rounded-lg bg-white p-6 shadow dark:bg-gray-800'>
-              <div className='mb-6'>
+              <ProfileCard
+                initialData={{
+                  name: 'luc',
+                  ensName: 'luc.eth',
+                  avatar:
+                    'ipfs://bafkreifnrjhkl7ccr2ifwn2n7ap6dh2way25a6w5x2szegvj5pt4b5nvfu',
+                  header:
+                    'ipfs://bafkreie5e6fkxltkyyn3q5hwblhd3c42mpwlqnis2a6hmfwitzdgbt7zdu',
+                  description:
+                    'Create Epic Shit, DevRel @ ENS, Researcher @ V3X',
+                  location: 'Breda, NL',
+                  email: 'luc@ens.domains',
+                  url: 'https://luc.computer',
+                  socialmedia: [
+                    {
+                      platform: 'twitter',
+                      username: 'lucemansnl',
+                    },
+                    {
+                      platform: 'github',
+                      username: 'lucemans',
+                    },
+                  ],
+                }}
+              />
+
+              <div className='mt-8 mb-6'>
                 <h2 className='mb-2 text-xl font-semibold'>
                   Account Information
                 </h2>

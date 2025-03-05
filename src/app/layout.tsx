@@ -8,6 +8,7 @@ import { Providers } from '@/app/providers'
 import { Header } from '@/components/header'
 import React from 'react'
 import { headers } from 'next/headers'
+import { Toaster } from '@/components/ui/sonner'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -34,6 +35,7 @@ export default function RootLayout({
             <Header />
             <div className='flex-1'>{children}</div>
           </div>
+          <Toaster />
         </Providers>
       </body>
     </html>
