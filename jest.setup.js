@@ -4,4 +4,4 @@
 process.env = {
   ...process.env,
   // Add any default environment variables for testing here
-}; 
+}

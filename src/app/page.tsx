@@ -12,6 +12,7 @@ function App() {
     <>
       <div>
         <h2>Account</h2>
+        <div className='prose flex flex-col text-red-500'>{'test'}</div>
 
         <div>
           status: {account.status}
@@ -22,7 +23,7 @@ function App() {
         </div>
 
         {account.status === 'connected' && (
-          <Button type="button" onClick={() => disconnect()}>
+          <Button type='button' onClick={() => disconnect()}>
             Disconnect
           </Button>
         )}
@@ -30,11 +31,11 @@ function App() {
 
       <div>
         <h2>Connect</h2>
-        {connectors.map((connector) => (
+        {connectors.map(connector => (
           <Button
             key={connector.uid}
             onClick={() => connect({ connector })}
-            type="button"
+            type='button'
           >
             {connector.name}
           </Button>

@@ -2,5 +2,5 @@
  * Configuration module exports
  */
 
-export * from './wagmi';
-export * from './validation'; 
+export * from './wagmi'
+export * from './validation'

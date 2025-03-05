@@ -4,14 +4,14 @@ const nextConfig = {
   transpilePackages: [
     'debug',
     'supports-color',
-     '@metamask/sdk',
-  '@wagmi/connectors'
+    '@metamask/sdk',
+    '@wagmi/connectors',
   ],
 
   experimental: {
     // Silence ESM warnings
     // esmExternals: 'loose',
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
