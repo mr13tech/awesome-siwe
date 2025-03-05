@@ -2,22 +2,12 @@
 
 import { useSession } from 'next-auth/react'
 import { ProtectedRoute } from '@/components/protected-route'
-import { truncateAddress } from '@/lib/siwe'
+import { formatAddress, formatDate } from '@/lib/auth'
 import { Shield } from 'lucide-react'
 import { SessionDetails } from '@/components/session-details'
 
 export default function ProfilePage() {
   const { data: session } = useSession()
-
-  // Format the timestamp from the session
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return 'Unknown'
-    try {
-      return new Date(dateString).toLocaleString()
-    } catch (e) {
-      return 'Invalid date'
-    }
-  }
 
   return (
     <ProtectedRoute>
@@ -34,7 +24,7 @@ export default function ProfilePage() {
                 </p>
                 <p className='font-medium'>
                   {session?.address
-                    ? truncateAddress(session.address)
+                    ? formatAddress(session.address)
                     : 'Not connected'}
                 </p>
                 <p className='mt-1 text-xs break-all text-gray-500'>
@@ -100,8 +90,9 @@ export default function ProfilePage() {
                 password.
               </p>
               <p>
-                When you sign a SIWE message, you're proving ownership of your
-                Ethereum address without revealing any sensitive information.
+                {
+                  'When you sign a SIWE message, you are proving ownership of your Ethereum address without revealing any sensitive information'
+                }
               </p>
               <p>Benefits of SIWE:</p>
               <ul className='list-disc space-y-1 pl-5'>

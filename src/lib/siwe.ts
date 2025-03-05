@@ -1,17 +1,56 @@
 import { SiweMessage } from 'siwe'
-import { getCsrfToken } from 'next-auth/react'
+import { getAuthDomain } from './auth'
 
-export async function createSiweMessage(address: string, statement: string) {
-  const domain = window.location.host
+/**
+ * SIWE Message Configuration Options
+ */
+export interface SiweMessageOptions {
+  address: string
+  statement: string
+  chainId?: number
+  expirationInHours?: number
+  resources?: string[]
+}
+
+/**
+ * Generates a cryptographically secure nonce for SIWE authentication
+ * @returns A secure random string for use as a nonce
+ */
+function generateSecureNonce(): string {
+  const timestamp = Date.now().toString()
+  const random = Math.random().toString(36).substring(2, 15)
+  const secondRandom = Math.random().toString(36).substring(2, 15)
+  return `siwe-${timestamp}-${random}-${secondRandom}`
+}
+
+/**
+ * Creates a SIWE message with proper formatting and security measures
+ * @param options - Configuration options for the SIWE message
+ * @returns Promise resolving to a formatted SIWE message string
+ */
+export async function createSiweMessage(
+  options: SiweMessageOptions,
+): Promise<string> {
+  const {
+    address,
+    statement,
+    chainId = 1, // Default to Ethereum mainnet
+    expirationInHours = 24,
+    resources = [],
+  } = options
+
+  // Get domain and origin from window location
+  const domain = getAuthDomain()
   const origin = window.location.origin
 
-  // Default to mainnet (chain ID 1)
-  const chainId = 1
+  // Generate a secure nonce directly - no need to fetch from NextAuth
+  const nonce = generateSecureNonce()
 
-  const csrfToken = await getCsrfToken()
-  if (!csrfToken) throw new Error('CSRF token not found')
+  // Add the current page as a resource if none provided
+  const messageResources =
+    resources.length > 0 ? resources : [`${origin}/profile`]
 
-  // Create a SIWE message with additional metadata
+  // Create SIWE message with all required fields
   const siweMessage = new SiweMessage({
     domain,
     address,
@@ -19,13 +58,12 @@ export async function createSiweMessage(address: string, statement: string) {
     uri: origin,
     version: '1',
     chainId,
-    nonce: csrfToken,
-    // Adding optional fields for enhanced functionality
+    nonce,
     issuedAt: new Date().toISOString(),
-    expirationTime: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(), // 24 hours from now
-    resources: [
-      `${origin}/profile`, // Example: specify resources this signature grants access to
-    ],
+    expirationTime: new Date(
+      Date.now() + 1000 * 60 * 60 * expirationInHours,
+    ).toISOString(),
+    resources: messageResources,
   })
 
   return siweMessage.prepareMessage()
