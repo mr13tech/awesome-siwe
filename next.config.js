@@ -1,4 +1,17 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  reactStrictMode: true,
+  transpilePackages: [
+    'debug',
+    'supports-color',
+     '@metamask/sdk',
+  '@wagmi/connectors'
+  ],
 
-module.exports = nextConfig
+  experimental: {
+    // Silence ESM warnings
+    // esmExternals: 'loose',
+  },
+};
+
+module.exports = nextConfig;
