@@ -49,7 +49,7 @@ export function formatAddress(
  * @returns Formatted date string
  */
 export function formatDate(
-  dateString?: string,
+  dateString: string | null | undefined,
   options: Intl.DateTimeFormatOptions = {
     dateStyle: 'medium',
     timeStyle: 'short',

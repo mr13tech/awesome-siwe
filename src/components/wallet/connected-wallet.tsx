@@ -6,13 +6,11 @@ import Link from 'next/link'
 import { useWallet } from '@/hooks/use-wallet'
 import { LogOut, Shield, ShieldCheck } from 'lucide-react'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import { useSession } from 'next-auth/react'
-import { useSiweAuth } from '@/hooks/use-siwe-auth'
+import { useSIWE } from '@/hooks/useSIWE'
 
 export function ConnectedWallet() {
   const { account, disconnect, getWalletConfig, formatAddress } = useWallet()
-  const { data: session } = useSession()
-  const { login, logout, loading } = useSiweAuth()
+  const { isAuthenticated, isLoading, signIn, signOut } = useSIWE()
 
   if (account.status !== 'connected') {
     return null
@@ -24,12 +22,11 @@ export function ConnectedWallet() {
 
   const address = account.addresses?.[0] || ''
   const formattedAddress = formatAddress(address)
-  const isAuthenticated = !!session?.address
 
   // Handle disconnection from both SIWE and wallet
   const handleDisconnect = async () => {
     if (isAuthenticated) {
-      await logout()
+      await signOut()
     }
     disconnect()
   }
@@ -66,15 +63,15 @@ export function ConnectedWallet() {
         <Button
           variant='outline'
           size='sm'
-          onClick={login}
-          disabled={loading}
+          onClick={signIn}
+          disabled={isLoading}
           className='border-primary/20 hover:border-primary/50 flex items-center gap-1 transition-all duration-300'
         >
           <Shield className='mr-1 h-4 w-4' />
           <span className='hidden sm:inline'>
-            {loading ? 'Signing...' : 'Sign-In'}
+            {isLoading ? 'Signing...' : 'Sign-In'}
           </span>
-          <span className='inline sm:hidden'>{loading ? '...' : 'SIWE'}</span>
+          <span className='inline sm:hidden'>{isLoading ? '...' : 'SIWE'}</span>
         </Button>
       )}
 

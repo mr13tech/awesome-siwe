@@ -1,23 +1,33 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import React from 'react'
+import { useSIWE } from '@/hooks/useSIWE'
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { data: session, status } = useSession()
+  const { isAuthenticated, isLoading, fetchSession } = useSIWE()
+  const [isChecking, setIsChecking] = useState(true)
   const router = useRouter()
 
   useEffect(() => {
-    if (status === 'loading') return
+    const checkAuth = async () => {
+      await fetchSession()
+      setIsChecking(false)
+    }
 
-    if (!session) {
+    checkAuth()
+  }, [fetchSession])
+
+  useEffect(() => {
+    if (isChecking || isLoading) return
+
+    if (!isAuthenticated) {
       router.push('/')
     }
-  }, [session, status, router])
+  }, [isAuthenticated, isLoading, isChecking, router])
 
-  if (status === 'loading') {
+  if (isLoading || isChecking) {
     return (
       <div className='flex min-h-[50vh] items-center justify-center'>
         <div className='flex flex-col items-center gap-2'>
@@ -47,7 +57,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     )
   }
 
-  if (!session) {
+  if (!isAuthenticated) {
     return null
   }
 

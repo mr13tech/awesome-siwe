@@ -1,11 +1,11 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import { ChevronDown, ChevronUp, Key } from 'lucide-react'
+import { useSIWE } from '@/hooks/useSIWE'
 
 export function SessionDetails() {
-  const { data: session } = useSession()
+  const { session } = useSIWE()
   const [expanded, setExpanded] = useState(false)
 
   if (!session) {
