@@ -18,7 +18,7 @@ import { Menu, Home, User, BookOpen } from 'lucide-react'
 import { Button } from './ui/button'
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet'
 
-export function SiteHeader() {
+export function Header() {
   const pathname = usePathname()
   const { status } = useAccount()
   const [isOpen, setIsOpen] = useState(false)

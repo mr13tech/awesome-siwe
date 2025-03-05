@@ -1,7 +1,7 @@
 import { Shield, Wallet, Smartphone } from 'lucide-react'
-import { FeatureCard } from './feature-card'
+import { HomeFeatureCard } from './feature-card'
 
-const features = [
+const homeFeatures = [
   {
     icon: Shield,
     title: 'Secure Authentication',
@@ -19,11 +19,11 @@ const features = [
   },
 ]
 
-export function FeatureGrid() {
+export function HomeFeatures() {
   return (
     <div className='grid w-full gap-6 sm:grid-cols-3'>
-      {features.map(feature => (
-        <FeatureCard key={feature.title} {...feature} />
+      {homeFeatures.map(feature => (
+        <HomeFeatureCard key={feature.title} {...feature} />
       ))}
     </div>
   )

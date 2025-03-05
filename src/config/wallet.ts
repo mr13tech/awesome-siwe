@@ -1,5 +1,5 @@
 // Supported wallet configurations with styling information
-export const walletConfig = [
+export const wallets = [
   {
     id: 'metamask',
     name: 'MetaMask',
@@ -38,4 +38,4 @@ export const walletConfig = [
   },
 ]
 
-export type WalletConfigItem = (typeof walletConfig)[number]
+export type WalletConfig = (typeof wallets)[number]

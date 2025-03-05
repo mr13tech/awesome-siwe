@@ -1,12 +1,12 @@
 import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
-import { Button } from './ui/button'
+import { Button } from '@/components/ui/button'
 
-interface HeroSectionProps {
+interface HomeHeroProps {
   isConnected: boolean
 }
 
-export function HeroSection({ isConnected }: HeroSectionProps) {
+export function HomeHero({ isConnected }: HomeHeroProps) {
   return (
     <div className='flex max-w-3xl flex-col items-center gap-8 text-center'>
       <div className='space-y-4'>

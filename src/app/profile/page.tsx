@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAccount } from 'wagmi'
-import { Profile } from '@/components/profile'
+import { Profile } from '@/components/profile/profile'
 
 export default function ProfilePage() {
   const router = useRouter()

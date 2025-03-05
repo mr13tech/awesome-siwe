@@ -1,16 +1,16 @@
 import { LucideIcon } from 'lucide-react'
 
-interface FeatureCardProps {
+interface HomeFeatureCardProps {
   icon: LucideIcon
   title: string
   description: string
 }
 
-export function FeatureCard({
+export function HomeFeatureCard({
   icon: Icon,
   title,
   description,
-}: FeatureCardProps) {
+}: HomeFeatureCardProps) {
   return (
     <div className='bg-muted/30 hover:border-primary/50 flex h-full flex-col rounded-lg border p-6 transition-all duration-300 hover:shadow-md'>
       <Icon className='text-primary/80 mb-3 h-8 w-8' />

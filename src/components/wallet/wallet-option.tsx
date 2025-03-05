@@ -1,14 +1,15 @@
 'use client'
 
 import Image from 'next/image'
-import { Button } from '@/components/ui/button'
-import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react'
 import type { Connector } from 'wagmi'
-import { WalletConfigItem } from '@/config/wallet'
+import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react'
+
+import { Button } from '@/components/ui/button'
+import { WalletConfig } from '@/config/wallet'
 
 type WalletOptionProps = {
   connector: Connector
-  config: WalletConfigItem
+  config: WalletConfig
   status: 'idle' | 'connecting' | 'connected' | 'error'
   onClick: () => void
   disabled: boolean

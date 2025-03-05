@@ -16,7 +16,7 @@ import { useWallet } from '@/hooks/use-wallet'
 // We don't need isOpen and onOpenChange props anymore since the parent Dialog handles this
 export function WalletConnectionDialog() {
   const {
-    getConnectors,
+    connectors,
     getWalletConfig,
     connectWallet,
     getStatus,
@@ -34,7 +34,7 @@ export function WalletConnectionDialog() {
         </DialogDescription>
       </DialogHeader>
       <div className='grid max-h-[60vh] grid-cols-1 gap-4 overflow-y-auto py-4 pr-1'>
-        {getConnectors().map(connector => {
+        {connectors.map(connector => {
           const config = getWalletConfig(connector.id)
           const connectorStatus = getStatus(connector)
 

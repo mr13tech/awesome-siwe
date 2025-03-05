@@ -1,8 +1,8 @@
 'use client'
 
 import { useAccount } from 'wagmi'
-import { HeroSection } from '@/components/hero-section'
-import { FeatureGrid } from '@/components/feature-grid'
+import { HomeHero } from '@/components/home/hero'
+import { HomeFeatures } from '@/components/home/features'
 
 export default function Home() {
   const { status } = useAccount()
@@ -20,11 +20,11 @@ export default function Home() {
           </p>
         </div>
 
-        <HeroSection isConnected={isConnected} />
+        <HomeHero isConnected={isConnected} />
 
         {!isConnected && (
           <div className='w-full space-y-6'>
-            <FeatureGrid />
+            <HomeFeatures />
           </div>
         )}
       </div>
