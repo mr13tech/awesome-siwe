@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { Web3Button } from '@/components/web3-button'
 import {
   NavigationMenu,
@@ -10,18 +9,14 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
 import { useState } from 'react'
-import { Menu, Home, BookOpen } from 'lucide-react'
+import { Menu, BookOpen } from 'lucide-react'
 import { Button } from './ui/button'
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet'
-import { useSIWE } from '@/hooks/useSIWE'
 
 export function Header() {
-  const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
-  const { isAuthenticated } = useSIWE()
 
   return (
     <header className='bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur'>
