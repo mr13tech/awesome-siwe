@@ -66,3 +66,58 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
+
+# Awesome SIWE
+
+A Sign In With Ethereum (SIWE) implementation using Next.js, Prisma, and PostgreSQL.
+
+## Prisma Setup
+
+This project uses [Prisma](https://www.prisma.io/) as the ORM for database access. Below are the key commands and concepts for working with Prisma:
+
+### Prisma Commands
+
+```bash
+# Generate Prisma Client
+bun run prisma:generate
+
+# Push schema changes to the database (development)
+bun run prisma:push
+
+# Open Prisma Studio (database GUI)
+bun run prisma:studio
+```
+
+### Prisma Migrations vs. DB Push
+
+There are two ways to apply your schema changes to the database:
+
+1. **prisma db push** - Quick development workflow without migrations (what we're using)
+   ```bash
+   bun run prisma:push
+   ```
+2. **prisma migrate** - Production-ready migrations with history
+
+   ```bash
+   # Create a migration
+   npx prisma migrate dev --name describe_your_changes
+
+   # Apply migrations in production
+   npx prisma migrate deploy
+   ```
+
+For this project, we're using `db push` for simplicity, but in a production environment, you might want to switch to migrations for better version control of your database schema.
+
+### Database Schema
+
+The main model in our database is the `Profile` model, which stores user profile information linked to their Ethereum wallet address.
+
+### Regenerating the Prisma Client
+
+Whenever you make changes to the Prisma schema (`prisma/schema.prisma`), you need to regenerate the Prisma Client:
+
+```bash
+bun run prisma:generate
+```
+
+## Getting Started
